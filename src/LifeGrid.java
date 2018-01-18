@@ -2,7 +2,7 @@
  * SE1021
  * Winter 2018
  * Lab Game Of Life
- * Name: Derek Riley (edits by Chris Taylor & Brad Dennis)
+ * Name: Derek Riley (edits by Chris Taylor, Brad Dennis and Noah Kennedy)
  * Created 11/25/2016
  * Revised 1/11/2018
  */
@@ -22,6 +22,8 @@ import java.util.List;
 public class LifeGrid {
 
     private static final double ALIVE_CHANCE = 0.5;
+    private int livingCells = 0;
+    private int deadCells = 0;
 
     /**
      * This instance variable stores the grid of Cells
@@ -88,18 +90,32 @@ public class LifeGrid {
      * Cells have a 50% chance of being alive or dead.
      */
     public void randomize() {
+        livingCells = 0;
+        deadCells = 0;
+
         for (List<Cell> row : cells) {
             for (Cell cell : row) {
                 cell.setAlive(Math.random() < ALIVE_CHANCE);
                 cell.updateColors();
+
+                //update the count of living and dead cells
+                if(cell.isAlive()) {
+                    livingCells++;
+                } else {
+                    deadCells++;
+                }
             }
         }
     }
 
     /**
      * This method triggers one iteration (tick) of the game of life rules for the entire grid.
+     * It also counts updates the count of living and dead cells.
      */
     public void iterate() {
+        livingCells = 0;
+        deadCells = 0;
+
         for (List<Cell> row : cells) {
             for (Cell cell : row) {
                 cell.determineNextTick();
@@ -108,17 +124,38 @@ public class LifeGrid {
         for (List<Cell> row : cells) {
             for (Cell cell : row) {
                 cell.updateTick();
+                //update the count of living and dead cells
+                if (cell.isAlive()) {
+                    livingCells++;
+                } else {
+                    deadCells++;
+                }
             }
         }
     }
 
+    public int getLivingCells() {
+        return livingCells;
+    }
+
+    public int getDeadCells() {
+        return deadCells;
+    }
+
     /**
-     * This method adds all the cell rectangles to the Pane
+     * This method adds all the cell rectangles to the Pane.
+     * Also determines how clicking on a cell will be handled.
      */
     private void initialize(Pane gamePane) {
         for (List<Cell> row : cells) {
             for (Cell cell : row) {
                 gamePane.getChildren().add(cell);
+
+                //handle event for clicking on cells
+                cell.setOnMouseClicked(event -> {
+                    cell.setAlive(!cell.isAlive());
+                    cell.updateColors();
+                });
             }
         }
     }
