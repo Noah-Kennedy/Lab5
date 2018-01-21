@@ -19,8 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.awt.event.MouseEvent;
-
 /**
  * The driver class for the Lab5 Conway's Game of Life application.
  *

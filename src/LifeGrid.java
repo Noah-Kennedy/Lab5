@@ -28,7 +28,7 @@ public class LifeGrid {
     /**
      * This instance variable stores the grid of Cells
      */
-    private List<List<Cell>> cells;
+    private final List<List<Cell>> cells;
 
 
     /**
